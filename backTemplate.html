@@ -1,0 +1,471 @@
+<script>
+    ////////////////////////////////////////////////////////
+    ///////////////////// Variables ////////////////////////
+    ////////////////////////////////////////////////////////
+    // here you can set different preferences for the presets
+
+    // the main color for the card in RGB-format; base for calculating all other colors.
+    // must be in the format [r, g, b] where r, g, b are numbers between 0 and 255.
+    var colorRGB=[205, 0, 205];
+
+    // set which fields are to be shown by default
+    // allowed values are true and false
+    var show_pitch_by_default = false;
+    var show_pitch_graph_by_default = false;
+    var show_example_sentence_by_default = false;
+    var show_sentence_furigana_by_default = false;
+
+    var expr_font_size = 30;        // font size in px for the expression at the very top; default: 30
+    var content_font_size = 18;     // font size in px for the example sentence, pitch information, notes and the definitions; default: 18
+    var tag_popup_font_size = 10;   // font size in px for the tag explanations when hovering over them; default: 10
+
+    // !!! If you don't know what you are doing, do not procceed beyond this point !!!
+    ////////////////////////////////////////////////////////
+    ////////////////// End of Variables ////////////////////
+    ////////////////////////////////////////////////////////
+</script>
+
+
+<div class="main" id="main">
+    <div id="expr-field" class="expression-field content">
+        <span class="expression fill-flex">
+            <span id="expr">{{Furigana}}</span>
+            <span id="audio">{{Audio}}</span>
+        </span>
+        <aside class="tab corner-offset">
+            <div id="pitch-tab" class="title">Pitch</div>
+            <div id="ex-tab" class="title">Example</div>
+            <div id="notes-tab" class="title">Notes</div>
+        </aside>
+    </div>
+
+    <div class="content-container">
+        <span id="pitch-content" class="content hidden top-border">
+            <div class="fill-flex">
+                <div id="pitch">
+                    {{Pitch}}
+                </div>
+                <div id="pitch-graph" class="hidden">
+                    {{Pitch Graph}}
+                </div>
+            </div>
+            <aside class="tab">
+                <div id="graph-tab" class="title">Graph</div>
+            </aside>
+        </span>
+        <div id="ex-content" class="content hidden top-border">
+            <ol class="fill-flex">
+                <div id="ex-plain">
+                    {{Sentence}}
+                </div>
+                <div id="ex-furi" class="hidden">
+                    {{Sentence with furigana}}
+                </div>
+            </ol>
+            <aside class="tab">
+                <div id="ex-furi-tab" class="title">Furigana</div>
+            </aside>
+        </div>
+        <span id="notes-content" class="content hidden top-border">
+            <div id="notes-info">
+                {{Notes}}
+            </div>
+        </span>
+    </div>
+
+    <div class="glossary top-border">
+        <div class="content">
+            <span id="meaning" class="fill-flex">{{Meaning}}</span>
+            <aside id=dictionary-tabs class="tab">
+            </aside>
+        </div>
+        <div class="jisho-link">
+            <a class="jisho-link" href="http://jisho.org/search/{{Expression}}">≪Jisho.org≫</a>
+        </div>
+    </div>
+</div>
+
+    
+<script>
+////////////////////////////////////////////////////////////////////////////
+///////////////////formating the provided field contents////////////////////
+    
+// Expression on top
+var expression = document.getElementById('expr');
+formatRuby(expression);
+
+// Pitch and Pitch graph
+var pitch = document.getElementById('pitch');
+var pitchGraph = document.getElementById('pitch-graph');
+formatPitchContent(pitch, pitchGraph);
+
+// Example Sentence with and without Furigana
+var sentence = document.getElementById('ex-plain');
+var sentenceFurigana = document.getElementById('ex-furi');
+
+// Notes
+var notes = document.getElementById('notes-info').textContent.trim();
+
+// Meaning
+var meaning = document.getElementById('meaning');
+formatMeaning(meaning);
+
+
+// clip rgb values to fit [0, 255] range
+for(var i=0; i<colorRGB.length; i++) 
+    colorRGB[i] = (colorRGB[i]>255) ? 255 : ((colorRGB[i]<0) ? 0 : colorRGB[i]);
+
+// apply the set variables
+var root = document.querySelector(':root');
+
+// set the corresponding variables on the style sheet
+var colorHSL = RGBtoHSL(colorRGB[0], colorRGB[1], colorRGB[2]);
+root.style.setProperty('--h', colorHSL[0] + '');
+root.style.setProperty('--s', colorHSL[1] + '%');
+root.style.setProperty('--l', colorHSL[2] + '%');
+root.style.setProperty('--l-copy', colorHSL[2] + '%');
+
+/** Converts a given RGB color to HSL format, compatible with CSS' HSL colors
+ * 
+ * @param {int} r - red color value, between 0 and 255
+ * @param {int} g - green color value,  between 0 and 255
+ * @param {int} b - blue color value, between 0 and 255
+ * @returns {number[]} array in the form [h, s, l]
+ */
+function RGBtoHSL(r, g, b) {
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+    var cMin = Math.min(r, g, b);
+    var cMax = Math.max(r, g, b);
+
+    var h, s, l;
+    l = (cMin + cMax) / 2;
+    if (cMin == cMax) 
+        h = s = 0;
+    else {
+        var delta = cMax - cMin;
+        s = delta/(1-Math.abs(2*l - 1));
+
+        switch(cMax) {
+            case r: 
+                h = (g-b)/delta + (g<b ? 6: 0);
+                break;
+            case g:
+                h = (b-r)/delta + 2;
+                break;
+            case b:
+                h = (r-g)/delta + 4;
+                break;
+        }
+        h /= 6;
+    }
+    return [h*360, s*100, l*100];
+}
+
+
+////////////////////////// Arrange Pitch Accent Field ///////////////////////////////
+/** Unwrap all 'ol' or 'ul' elements into a flat array
+ * 
+ * @param {HTMLElement} elem - source that the array will be created from
+ * @returns {HTMLElement[]}
+ */
+function htmlToArray(elem) {
+    var returnList = [];
+    if(elem.tagName === 'OL' || elem.tagName === 'UL')
+        elem.childNodes.forEach( child => { returnList = returnList.concat(htmlToArray(child)) });
+    else
+        if(elem.nodeType !== Node.TEXT_NODE)
+            returnList.push(elem);
+    return returnList;
+}
+
+/** Format the pitch and the pitch graph.
+ *  Set them up, so the pitch element displays a list with the different marked readings
+ *  and the graph element shows the readings list with the corresponding graphs above
+ * 
+ * @param {HTMLElement} pitchElem - readings with the pitch markings
+ * @param {HTMLElement} graphElem - graph visualisations
+ */
+function formatPitchContent(pitchElem, graphElem) {
+    if(!pitchElem.firstElementChild) return;     // no formating possible if no pitch is given
+    var pitchArray = htmlToArray(pitchElem.firstElementChild);
+    var graphArray = htmlToArray(graphElem.firstElementChild);
+
+    var pitchOl = document.createElement('ol');
+    var graphOl = document.createElement('ol');
+    
+    for(var i=0; i<pitchArray.length; i++) {
+        var pitchPlain = pitchArray[i];
+        var graph = document.createElement('span');
+        graph.classList.add('graph'); 
+        // if the word starts with sutegana move the graph over to fit the mora slightly better
+        if('ゃャゅュょョ'.includes(pitchPlain.innerText[1])) 
+            graph.classList.add('sutegana');
+
+        if(pitchPlain.tagName !== 'LI') {   // ensure consistent formating
+            var liPitchElem = document.createElement('li');
+            liPitchElem.appendChild(pitchPlain);
+            pitchPlain = liPitchElem;
+        }
+        if(graphArray[i].tagName !== 'LI') 
+            graph.appendChild(graphArray[i]);
+        else 
+            graphArray[i].childNodes.forEach( child => { graph.appendChild(child) });
+
+        pitchOl.appendChild(pitchPlain);
+        graphOl.appendChild(graph);
+        graphOl.appendChild(pitchPlain.cloneNode(true));
+    }
+    pitchElem.textContent = '';
+    graphElem.textContent = '';
+    pitchElem.appendChild(pitchOl);
+    graphElem.appendChild(graphOl);
+}
+
+/** Reformat the element by putting each kanji in it's own HTMLElement 
+ * and adding the popup funcionality for the stroke order
+ * 
+ * @param {HTMLElement} rubyElem - element containing the ruby tags to format
+ */
+ function formatRuby(rubyElem) {
+    rubyElem.childNodes.forEach( child => {
+        if (child.tagName === 'RUBY') {
+            child.childNodes.forEach( c => {
+                if(c.nodeType === Node.TEXT_NODE) {
+                    var text = c.textContent;
+                    c.textContent = '';
+                    for(var i=0; i<text.length; i++) {
+                        var kanjiElem = document.createElement('span');
+                        var kanjiPopup = document.createElement('span');
+                        kanjiElem.classList.add('popup');
+                        kanjiPopup.classList.add('popup-text', 'stroke-order');
+                        kanjiElem.innerText = kanjiPopup.innerText = text[i];
+                        kanjiElem.appendChild(kanjiPopup);
+                        child.insertBefore(kanjiElem, c);
+                    }
+                    child.removeChild(c);
+                }
+            });
+        }
+    });
+ }
+/////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////// format glossary from meaning /////////////////////////////
+/** @typedef {Object} content
+ *  @property {HTMLElement[]} tags - the tags associated with the given glossary entries
+ *  @property {HTMLElement[]} entries - array of related glossary entries 
+ */
+
+/** Extract the tag and glossary information from a dictionary element
+ * 
+ * @param {HTMLElement} dictElem - dictionary element
+ * @returns {content} array of glossary content objects in the dictionary
+ */
+function getDictionaryContent(dictElem) {
+    var content = [];
+    var tags = [];
+    var entries = [];
+    dictElem.childNodes.forEach( entry => {
+        switch(entry.dataset?.type) {
+            case 'tag':
+                if (!entry.dataset.tagNotes.match(/Sense #/g)) {    // filter out JMDicts numbered entry tags
+                    if (entry.dataset.tagNotes === "")              // disable the popup feature, if the popup has no content, anyway
+                        entry.classList.remove('popup');
+                    tags.push(entry);
+                }
+                break;
+            case 'glossary-entry':
+                entries.push(entry);
+                break; 
+            case 'glossary':
+                // if there are any existing entry lists, complete those first
+                if(entries.length > 0) 
+                    content.push({tags: tags, entries: entries});  
+                entries = [];
+                // glossaries are set up to only ever contain 'glossary-entries'
+                entry.childNodes.forEach( child => { entries.push(child) });
+                content.push({tags: tags, entries: entries});
+                entries = [];
+                tags = [];
+                break;
+        }
+    });
+    if(entries.length > 0) 
+        content.push({tags: tags, entries: entries});
+    return content;
+}
+
+/**Reformat the elements contained in a dictionary object to a HTMLElement
+ * @param {Object} dict - dictionary object
+ * @param {string} dict.dictionary  - name of the dictionary
+ * @param {content[]} dict.content - array of content objects
+ * @returns {HTMLElement} new element containing the dictionary's information
+ */
+function formatDictionary(dict) {
+    var dictElem = document.createElement('div');
+    dictElem.id = dict.dictionary;
+    dictElem.classList.add('dictionary');
+    var tagNames = [];
+    var oldTagNames = [];
+    dict.content.forEach( content => {
+        var tagListElem = document.createElement('span');
+        var entryElem = document.createElement('ul');
+        var difTag = false;
+        content.tags.forEach( tag => {
+            if(tag.dataset?.tagName) {
+                tagNames.push(tag.dataset.tagName);
+                if(!oldTagNames.includes(tag.dataset.tagName)) 
+                    difTag = true;
+            }
+        });
+        if(difTag) {
+            content.tags.forEach( t=>{tagListElem.appendChild(t)});
+            entryElem.appendChild(tagListElem);
+        }
+        content.entries.forEach( entry => {entryElem.appendChild(entry)});
+        dictElem.appendChild(entryElem);
+        oldTagNames = [...tagNames];
+        tagNames = [];
+    });
+    return dictElem;
+}
+
+/** Create individual elements to the MeaningElem for the provided dictionaries and their entries
+ *  and add the tabs to switch between them.
+ * 
+ *  @param {HTMLElement} meaningElem - element containing the contents of the cards 'Meaning' field
+ */
+function formatMeaning(meaningElem) {
+    var meaningArray = [];
+    meaningElem.childNodes.forEach( dict => {
+        if(dict.dataset?.dictionary) {
+            var content = getDictionaryContent(dict);
+            if(dict.dataset.dictionary === meaningArray[meaningArray.length-1]?.dictionary) {
+                var dictEntry = meaningArray[meaningArray.length-1];
+                dictEntry.content = dictEntry.content.concat(content);
+            }
+            else 
+                meaningArray.push({dictionary: dict.dataset.dictionary, content: content});
+        }
+    });
+    meaningElem.textContent = '';
+    var tabsElem = document.getElementById('dictionary-tabs');
+    meaningArray.forEach( dict => {
+        var tab = document.createElement('div');
+        tab.id = dict.dictionary + '-tab';
+        tab.classList.add('title', 'unselected');
+        tab.textContent = dict.dictionary;
+        tabsElem.appendChild(tab);
+
+        meaningElem.appendChild(formatDictionary(dict));
+    });
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///////////////////// Side Tab Logic ////////////////////////////////////////////////////////////////////
+// disable the Sentence Tab. if it doesn't differ from the expression or no sentence has been provided
+if('{{Expression}}'==='{{Sentence}}' || sentence.textContent === '')
+{
+    document.getElementById('ex-tab').classList.add('disabled');
+}
+
+// disable Pitch Tab, if yomitan/-chan could not provide any data on it anyway
+if(pitch.textContent.includes('No pitch accent data') || pitch.textContent === '') {
+    document.getElementById('pitch-tab').classList.add('disabled');
+}
+
+// remove Notes Tab, if no notes have been provided
+if(notes === '') {
+    document.getElementById('notes-tab').classList.add('disabled');
+    document.getElementById('notes-tab').style.display = 'none';
+}
+
+// disable the Furigana Tab for Sentences, that don't contain any
+if(sentence.textContent === sentenceFurigana.textContent || sentenceFurigana.textContent === '') {
+    document.getElementById('ex-furi-tab').classList.add('disabled');
+}
+
+
+// trigger side tabs	
+/** Switch an Elements state between hidden and unhidden
+ * 
+ * @param {string} id - id of the element
+ * @param {boolean} hidden - if the element is currently hidden from the user
+ * @returns {boolean} new hidden-status of the element
+ */		
+function hideUnhideContent(id, hidden) 
+    { 
+        var content = document.getElementById(id);
+        if(hidden){ 
+            content.classList.remove('hidden');
+            content.classList.add('shown');
+        }
+        else {
+            content.classList.remove('shown');
+            content.classList.add('hidden');
+        }
+        return !hidden; 
+    }
+
+/** Switch an array of elements to hidden and a selected one to visible
+ *  and mark the selected tab
+ * 
+ * @param {string[]} ids - ids of all the related elements
+ * @param {int} selectedIdIndex - index of the ID in ids which is to be switched to visible
+ */
+function switchHiddenContent(ids, selectedIdIndex) {
+    for(var i=0; i<ids.length; i++) {
+        hideUnhideContent(ids[i], i===selectedIdIndex);
+        document.getElementById(ids[i] + '-tab').classList.replace(i===selectedIdIndex? 'unselected' :'selected', i===selectedIdIndex? 'selected' :'unselected');
+    }
+}
+
+/** Init a tab's functionality to influence the visiblity of one or two elements
+ * 
+ * @param {string} idTab - ID of the tab
+ * @param {string} idContent - ID of the content that should be hidden or unhidden when the tab is clicked
+ * @param {string} idSecondContent - if provided, a click on tab switches between the elements associated with this ID and idContent
+ * @param {boolean} showByDefault - if the content should be visible initially; default false
+ */
+function setupHideFunctionality(idTab, idContent, idSecondContent=null, showByDefault=false) {
+    var button = document.getElementById(idTab);
+    var isHidden = true;
+    if(!button.classList.contains('disabled')) {
+        button.addEventListener('click', () => {
+            if(idSecondContent) 
+                hideUnhideContent(idSecondContent, !isHidden);
+            isHidden = hideUnhideContent(idContent, isHidden);
+        });
+        if(showByDefault) { //call the functions once to trigger the variable setup
+            if(idSecondContent) 
+                hideUnhideContent(idSecondContent, !isHidden);
+            isHidden = hideUnhideContent(idContent, isHidden);
+        }
+    }
+}
+
+/** Init function for the switching between the different dictionaries
+ */
+function setupSwitchDicts() {
+    var ids = [];
+    for(let k=0; k<meaning.childNodes.length; k++) {
+        let id = meaning.childNodes[k].id;
+        ids.push(id);
+        document.getElementById(id+'-tab').addEventListener('click', () => { switchHiddenContent(ids, k) });    // todo: find a way to pass value not reference
+    }
+    switchHiddenContent(ids, 0);    
+}
+
+setupHideFunctionality('pitch-tab', 'pitch-content', null, show_pitch_by_default);
+setupHideFunctionality('ex-tab', 'ex-content', null, show_example_sentence_by_default);
+setupHideFunctionality('notes-tab', 'notes-content');
+setupHideFunctionality('graph-tab', 'pitch-graph', 'pitch', show_pitch_graph_by_default);
+setupHideFunctionality('ex-furi-tab', 'ex-furi', 'ex-plain', show_sentence_furigana_by_default);
+
+setupSwitchDicts();
+</script>

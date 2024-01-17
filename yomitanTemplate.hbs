@@ -1,0 +1,87 @@
+{{!~ bring the glossary entry in a coherent HTML-list format ~}}
+{{#*inline "py-format-structured"}}
+    {{~#scope~}}
+        <ol data-type="glossary">
+        {{~#if (op ">=" length 1)~}}
+            {{~#each .~}}
+                <li data-type="glossary-entry">{{content}}</li>
+            {{~/each~}}
+        {{~else~}}
+            <li data-type="glossary-entry">{{content}}</li>
+        {{~/if~}}
+        </ol>
+    {{~/scope~}}
+{{/inline}}
+
+{{!~ create html elements from the given structure ~}}
+{{#*inline "py-structured-to-html"}}
+    {{~#if tag~}}
+        <{{tag}}>{{>py-format-html content~}}
+    {{~else~}}
+        {{.}}
+    {{~/if~}}
+    {{~#if tag~}}
+        </{{tag}}>
+    {{~/if~}}
+{{/inline}}
+
+{{!~ unwrap list objects ~}}
+{{#*inline "py-format-html"}}
+    {{~#if (op "&&"(op "==" (typeof .) "object") (op ">" length 1))~}}
+        {{~#each .~}}
+            {{~>py-structured-to-html .}}
+        {{~/each~}}
+    {{~else~}}
+        {{~>py-structured-to-html .}}
+    {{~/if~}}
+{{/inline}}
+
+{{!~ recursively search in the glossary for the tags and the entry marked as "glossary", containing the definitions ~}}
+{{#*inline "py-unwrap-structured"}}  
+    {{~#scope~}}
+        {{~#set "is_glossary"~}}
+            {{~#regexMatch "glossary" "g"~}}{{data.content}}{{~/regexMatch~}}   {{!~ if data.content contains the word "glossary", content contains the entries ~}}
+        {{~/set~}}
+        {{~#set "is_ex_sentence"~}}
+            {{~#regexMatch "sentence" "g"~}}{{data.content}}{{~/regexMatch~}}
+        {{~/set~}}
+        {{~#set "is_note"~}}
+            {{~#regexMatch "note" "g"~}}{{data.content}}{{~/regexMatch~}}
+        {{~/set~}}
+
+        {{~#if (get "is_glossary")~}}
+            {{~>py-format-structured content~}}
+        {{~else if (get "is_ex_sentence")~}}
+            <li data-type="example-sentence">{{>py-format-html content}}</ol>
+        {{~else if (get "is_note")~}}
+            <li data-type="notes">{{>py-format-html content}}</ol>
+        {{~else if data.code~}} {{!~ only tags seem to have a data.code element ~}}
+            <i class="tag popup" data-type="tag" data-tag-name="{{~data.code~}}" data-tag-notes="{{~content.title~}}" data-tag-category="">{{~data.code~}}<span class="popup-text">{{~content.title~}}</span></i>
+        {{~else if (op ">=" length 1)~}}
+            {{~#each .~}}
+                {{~>py-unwrap-structured .~}}
+            {{/each}}
+        {{~else if content~}}
+            {{~>py-unwrap-structured content~}}
+        {{~/if~}}
+
+    {{~/scope~}}
+{{/inline}}
+
+{{!~ extract the glossary entries with their tags ~}}
+{{#*inline "py-glossary"}}
+    {{~#each definition.definitions~}}
+        <div data-dictionary="{{~dictionary~}}">
+        {{~#each definitionTags~}}
+            <i class="tag popup" data-type="tag" data-tag-name="{{~name~}}" data-tag-notes="{{~notes~}}" data-tag-category="{{~category~}}">{{~name~}}<span class="popup-text">{{~notes~}}</span></i>
+        {{~/each~}}
+        {{~#each glossary~}}
+            {{~#if (op "==" type "structured-content")~}}
+                {{~>py-unwrap-structured .~}}
+            {{~else~}}
+                <li data-type="glossary-entry">{{.}}</li>
+            {{~/if~}}
+        {{~/each~}}
+        </div>
+    {{~/each~}}
+{{/inline}}

@@ -1,0 +1,149 @@
+<script>
+    ////////////////////////////////////////////////////////
+    ///////////////////// Variables ////////////////////////
+    ////////////////////////////////////////////////////////
+    // here you can set different preferences for the presets
+
+    // the main color for the card in RGB-format; base for calculating all other colors.
+    // must be in the format [r, g, b] where r, g, b are numbers between 0 and 255.
+    var colorRGB=[205, 0, 205];
+
+    // set which fields are to be shown by default
+    // allowed values are true and false
+    var show_example_sentence_by_default = false;
+
+    var expr_font_size = 30;        // font size in px for the expression at the very top; default: 30
+    var content_font_size = 18;     // font size in px for the example sentence; default: 18
+
+    // !!! If you don't know what you are doing, do not procceed beyond this point !!!
+    ////////////////////////////////////////////////////////
+    ////////////////// End of Variables ////////////////////
+    ////////////////////////////////////////////////////////
+</script>
+
+
+<div class="main" id="main">
+    <div id="expr-field" class="expression-field content bottom">
+        <span class="expression fill-flex">
+            {{Expression}}
+        </span>
+        <aside class="tab corner-offset">
+            <div id="ex-tab" class="title">Example</div>
+        </aside>
+    </div>
+
+    <div class="content-container">
+        <div id="ex-content" class="content hidden top-border">
+            <ol id="ex-plain">
+                {{Sentence}}
+            </ol>
+        </div>
+    </div>
+</div>
+
+
+<script>
+// clip rgb values to fit [0, 255] range
+for(var i=0; i<colorRGB.length; i++) 
+    colorRGB[i] = (colorRGB[i]>255) ? 255 : ((colorRGB[i]<0) ? 0 : colorRGB[i]);
+
+// set the corresponding variables on the style sheet
+var colorHSL = RGBtoHSL(colorRGB[0], colorRGB[1], colorRGB[2]);
+var root = document.querySelector(':root');
+root.style.setProperty('--h', colorHSL[0] + '');
+root.style.setProperty('--s', colorHSL[1] + '%');
+root.style.setProperty('--l', colorHSL[2] + '%');
+root.style.setProperty('--l-copy', colorHSL[2] + '%');
+
+/**
+ * Converts a given RGB color to HSL format, compatible with CSS' HSL colors
+ * 
+ * @param {int} r red color value, between 0 and 255
+ * @param {int} g green color value,  between 0 and 255
+ * @param {int} b blue color value, between 0 and 255
+ * @returns {number[]} array in the form [h, s, l]
+ */
+function RGBtoHSL(r, g, b) {
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+    var cMin = Math.min(r, g, b);
+    var cMax = Math.max(r, g, b);
+
+    var h, s, l;
+    l = (cMin + cMax) / 2;
+    if (cMin == cMax) 
+        h = s = 0;
+    else {
+        var delta = cMax - cMin;
+        s = delta/(1-Math.abs(2*l - 1));
+
+        switch(cMax) {
+            case r: 
+                h = (g-b)/delta + (g<b ? 6: 0);
+                break;
+            case g:
+                h = (b-r)/delta + 2;
+                break;
+            case b:
+                h = (r-g)/delta + 4;
+                break;
+        }
+        h /= 6;
+    }
+    return [h*360, s*100, l*100];
+}
+
+// because yomitan/-chan also adds one-word sentences
+if("{{Expression}}"=="{{Sentence}}")
+{
+    document.getElementById('ex-tab').classList.add('disabled');
+}
+
+/** Switch an Elements state between hidden and unhidden
+ * 
+ * @param {string} id - id of the element
+ * @param {boolean} hidden - if the element is currently hidden from the user
+ * @returns {boolean} new hidden-status of the element
+ */	
+function hideUnhideContext(id, hidden, ) 
+{ 
+    var context = document.getElementById(id);
+    if(hidden){
+        document.getElementById('expr-field').classList.remove('bottom');
+        context.classList.remove('hidden');
+        context.classList.add('shown');
+    }
+    else {
+        document.getElementById('expr-field').classList.add('bottom');
+        context.classList.remove('shown');
+        context.classList.add('hidden');
+    }
+    return !hidden; 
+}
+/** Init a tab's functionality to influence the visiblity of one or two elements
+ * 
+ * @param {string} idTab - ID of the tab
+ * @param {string} idContent - ID of the content that should be hidden or unhidden when the tab is clicked
+ * @param {string} idSecondContent - if provided, a click on tab switches between the elements associated with this ID and idContent
+ * @param {boolean} showByDefault - if the content should be visible initially; default false
+ */
+function setupHideFunctionality(idButton, idContent, idSecondContent=null, showByDefault=false) {
+    var button = document.getElementById(idButton);
+    var isHidden = true;
+    if(!button.classList.contains('disabled')) {
+        button.addEventListener('click', () => {
+            if(idSecondContent) hideUnhideContext(idSecondContent, !isHidden);
+            isHidden = hideUnhideContext(idContent, isHidden);
+        });
+        if(showByDefault) { //call the functions once to trigger the variable setup
+            if(idSecondContent) hideUnhideContext(idSecondContent, !isHidden);
+            isHidden = hideUnhideContext(idContent, isHidden);
+        }
+    }
+}
+
+setupHideFunctionality('ex-tab', 'ex-content', null, show_example_sentence_by_default);
+
+</script>

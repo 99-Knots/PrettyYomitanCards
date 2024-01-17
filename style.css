@@ -1,0 +1,278 @@
+@font-face { 
+	font-family: StrokeOrder; 
+	src: url('_KanjiStrokeOrders_v4.004.ttf'); 
+}
+
+:root {
+    --expr-font-size: 30px;
+    --content-font-size: 18px;
+    --tab-font-size: 12px;
+    --tag-popup-font-size: 10px;
+
+    --h: 300;
+    --s: 100%;
+    --l: 50%;
+    --l-copy: 50%;
+    
+    --darken1: -10%;
+    --darken2: -20%;
+
+    --lighten1: 15%;
+    --lighten2: 30%;
+
+    --compl-offset: 240;
+    
+    --gloss-gradient: linear-gradient(hsl(var(--h), calc(var(--s) * 0.5), 90%), #eeeeee);
+    --gloss-font-color: #000000;
+
+    --popup-background: #eeeeee;
+    --popup-font-color: #000000;
+}
+
+.nightMode {
+    --l: calc(var(--l-copy) + var(--darken2));
+    
+    --popup-background: #000000;
+    --popup-font-color: #f5f5f5;
+    --gloss-gradient: linear-gradient(#333333, #111111);
+    --gloss-font-color: #f5f5f5;
+}
+
+.card {
+    font-family: "Empty", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Osaka", "メイリオ", "Meiryo", "ＭＳ Ｐゴシック", "MS PGothic", "ＭＳ ゴシック" , "MS Gothic", "Noto Sans CJK JP", "TakaoPGothic", sans-serif;
+    text-align: left;
+    overflow-y: scroll;
+
+    --main-color: hsl(var(--h), var(--s), var(--l));
+    --main-color-darker1: hsl(var(--h), var(--s), calc(var(--l) + var(--darken1)));
+    --main-color-darker2: hsl(var(--h), var(--s), calc(var(--l) + var(--darken2)));
+
+    --main-color-lighter1: hsl(var(--h), var(--s), calc(var(--l) + var(--lighten1)));
+    --main-color-lighter2: hsl(var(--h), var(--s), calc(var(--l) + var(--lighten2)));
+
+    --compl-color: hsl(calc(var(--h) +var(--compl-offset)), var(--s), var(--l));
+    --compl-color-darker: hsl(calc(var(--h) + var(--compl-offset)), var(--s), calc(var(--l) + var(--darken1)));
+
+    --expr-gradient: linear-gradient(var(--main-color), var(--main-color-darker1));
+    --expr-font-color: hsl(0, 0%, calc((70% - var(--l)) * 100));
+
+    --tab-gradient: linear-gradient(var(--main-color-lighter2), var(--main-color-lighter1));
+    --tab-font-color: hsl(0, 0%, calc((70% - var(--l) + var(--lighten1)) * 100));;
+
+    --content-gradient: linear-gradient(var(--main-color-darker1), var(--main-color-darker2));
+    --content-font-color: hsl(0, 0%, calc((70% - var(--l)) * 100));
+
+    --disa-tab-gradient: linear-gradient(#666666, #999999);
+    --disa-tab-font-color: #afafaf;
+
+    --tag-gradient: linear-gradient(var(--compl-color), var(--compl-color-darker));
+    --tag-font-color: hsl(0, 0%, calc((70% - var(--l)) * 100));
+
+    --link-font-color: var(--main-color);
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-right: 1em;
+}
+
+.main > :first-child {
+    border-top-left-radius: 1.5vh;
+    border-top-right-radius: 1.5vh;
+}
+
+.main > :last-child, .bottom {
+    border-bottom-left-radius: 1.5vh;
+    border-bottom-right-radius: 1.5vh;
+}
+
+.expression-field {
+    color: var(--expr-font-color);
+    font-size: var(--expr-font-size);
+    background: var(--expr-gradient);
+}
+
+.expression {
+    padding: 1.2em 0.8em 0.8em 0.8em;
+}
+
+.popup {
+    position: relative;
+}
+
+.popup:hover .popup-text {
+    visibility: visible;
+}
+
+.popup-text {
+    z-index: 1;
+    position: absolute;
+    top: 100%;
+    left: 0%;
+    color: var(--popup-font-color);
+    background-color: var(--popup-background);
+    border: 1px solid var(--popup-font-color);
+    visibility: hidden;
+    padding: 0.5em;
+    width: max-content;
+}
+
+.popup .stroke-order {
+    font-family: StrokeOrder;
+	font-size: 50vmin;
+	padding: 0.1em;
+}
+
+.replay-button {
+    width: 1em;
+    top: 0.8em;
+}
+
+.replay-button svg circle {
+    fill: none;
+    stroke: none;
+}
+
+.replay-button svg path {
+    fill: var(--expr-font-color);
+}
+
+.corner-offset {
+    margin-top: 1vh;
+}
+
+.tab {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    color: var(--tab-font-color);
+	font-family: 'times new roman';
+    font-weight: bold;
+    font-size: var(--tab-font-size);
+    text-align: right;
+    gap: 0.3em;
+    margin-top: 0.3em;
+    margin-right: -1em;
+}
+
+.tab .title {
+    background: var(--tab-gradient);
+    border-radius: 0.3em;
+    padding: 0.2em 0.2em 0.2em 1em;
+    user-select: none;
+    width: 6em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tab .title.selected {
+    margin-right: 0.8em;
+}
+
+.tab .title.unselected {
+    margin-left: 0.8em;
+}
+
+.tab .title:first {
+    margin-top: 1.5vh;
+}
+
+.tab .title:hover {
+    cursor: pointer;
+}
+
+.tab .title.disabled {
+    background: var(--disa-tab-gradient);
+    color: var(--disa-tab-font-color);
+}
+
+.tab .title.disabled:hover {
+    cursor: default;
+}
+
+.top-border {
+    border-top: calc(var(--content-font-size)*0.1) var(--content-font-color) solid;
+}
+
+.fill-flex {
+    flex: 1;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    color: var(--content-font-color);
+    font-size: var(--content-font-size);
+    background: var(--content-gradient);
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: baseline;
+    max-height: 9000px;
+    overflow: visible;
+}
+
+.hidden {
+    max-height: 0px;
+    border: 0;
+    overflow: hidden;
+}
+
+.graph {
+    font-size: calc(var(--content-font-size) * 1.4);
+}
+
+.graph.sutegana {
+    margin-left: 0.55em;
+}
+
+.tag {
+    color: var(--tag-font-color);
+    background: var(--tag-gradient);
+    margin: 0.2em;
+    padding: 0.1em 0.5em;
+    border-radius: 0.2em;
+    font-size: 60%;
+}
+
+.glossary {
+    color: var(--gloss-font-color);
+    background: var(--gloss-gradient);
+    padding-bottom: 0.8em;
+}
+
+.jisho-link {
+	color: var(--link-font-color);
+	text-align: center;
+	font-style: italic;
+	font-size: 90%;
+}
+
+#pitch-content li {
+    margin-bottom: 0.8em;
+    line-height: 1.5em;
+}
+
+#pitch-content li:last-child{
+    padding-bottom: 0px;
+}
+
+#ex-content ol{
+    line-height: 2em;
+}
+
+audio {
+    width: 60%;
+}
+
+ol, ul {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding-left: 2.5em;
+}
