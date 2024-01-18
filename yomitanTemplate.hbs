@@ -52,9 +52,9 @@
         {{~#if (get "is_glossary")~}}
             {{~>py-format-structured content~}}
         {{~else if (get "is_ex_sentence")~}}
-            <li data-type="example-sentence">{{>py-format-html content}}</ol>
+            <li data-type="example-sentence">{{>py-format-html content}}</li>
         {{~else if (get "is_note")~}}
-            <li data-type="notes">{{>py-format-html content}}</ol>
+            <li data-type="notes">{{>py-format-html content}}</li>
         {{~else if data.code~}} {{!~ only tags seem to have a data.code element ~}}
             <i class="tag popup" data-type="tag" data-tag-name="{{~data.code~}}" data-tag-notes="{{~content.title~}}" data-tag-category="">{{~data.code~}}<span class="popup-text">{{~content.title~}}</span></i>
         {{~else if (op ">=" length 1)~}}

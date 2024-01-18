@@ -1,28 +1,28 @@
 <script>
-    ////////////////////////////////////////////////////////
-    ///////////////////// Variables ////////////////////////
-    ////////////////////////////////////////////////////////
-    // here you can set different preferences for the presets
+////////////////////////////////////////////////////////
+///////////////////// Variables ////////////////////////
+////////////////////////////////////////////////////////
+// here you can set different preferences for the presets
 
-    // the main color for the card in RGB-format; base for calculating all other colors.
-    // must be in the format [r, g, b] where r, g, b are numbers between 0 and 255.
-    var colorRGB=[255, 0, 255];
+// the main color for the card in RGB-format; base for calculating all other colors.
+// must be in the format [r, g, b] where r, g, b are numbers between 0 and 255.
+var colorRGB = [120, 150, 100];
 
-    // set which fields are to be shown by default
-    // allowed values are true and false
-    var show_example_sentence_by_default = false;
+// set which fields are to be shown by default
+// allowed values are true and false
+var show_example_sentence_by_default = false;
 
-    var expr_font_size = 30;        // font size in px for the expression at the very top; default: 30
-    var content_font_size = 18;     // font size in px for the example sentence; default: 18
+var expr_font_size = 30;        // font size in px for the expression at the very top; default: 30
+var content_font_size = 18;     // font size in px for the example sentence; default: 18
 
-    // !!! If you don't know what you are doing, do not procceed beyond this point !!!
-    ////////////////////////////////////////////////////////
-    ////////////////// End of Variables ////////////////////
-    ////////////////////////////////////////////////////////
+// !!! If you don't know what you are doing, do not procceed beyond this point !!!
+////////////////////////////////////////////////////////
+////////////////// End of Variables ////////////////////
+////////////////////////////////////////////////////////
 </script>
 
 
-<div class="main" id="main">
+<div class="main" lang="ja">
     <div id="expr-field" class="expression-field content bottom">
         <span class="expression fill-flex">
             {{Expression}}
@@ -34,9 +34,9 @@
 
     <div class="content-container">
         <div id="ex-content" class="content hidden top-border">
-            <ol id="ex-plain">
+            <div id="ex-plain" class="padded">
                 {{Sentence}}
-            </ol>
+            </div>
         </div>
     </div>
 </div>

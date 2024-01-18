@@ -1,32 +1,32 @@
 <script>
-    ////////////////////////////////////////////////////////
-    ///////////////////// Variables ////////////////////////
-    ////////////////////////////////////////////////////////
-    // here you can set different preferences for the presets
+////////////////////////////////////////////////////////
+///////////////////// Variables ////////////////////////
+////////////////////////////////////////////////////////
+// here you can set different preferences for the presets
 
-    // the main color for the card in RGB-format; base for calculating all other colors.
-    // must be in the format [r, g, b] where r, g, b are numbers between 0 and 255.
-    var colorRGB=[205, 0, 205];
+// the main color for the card in RGB-format; base for calculating all other colors.
+// must be in the format [r, g, b] where r, g, b are numbers between 0 and 255.
+var colorRGB = [120, 150, 100];
 
-    // set which fields are to be shown by default
-    // allowed values are true and false
-    var show_pitch_by_default = false;
-    var show_pitch_graph_by_default = false;
-    var show_example_sentence_by_default = false;
-    var show_sentence_furigana_by_default = false;
+// set which fields are to be shown by default
+// allowed values are true and false
+var show_pitch_by_default = false;
+var show_pitch_graph_by_default = false;
+var show_example_sentence_by_default = false;
+var show_sentence_furigana_by_default = false;
 
-    var expr_font_size = 30;        // font size in px for the expression at the very top; default: 30
-    var content_font_size = 18;     // font size in px for the example sentence, pitch information, notes and the definitions; default: 18
-    var tag_popup_font_size = 10;   // font size in px for the tag explanations when hovering over them; default: 10
+var expr_font_size = 30;        
+var content_font_size = 18;     // font size in px for the example sentence, pitch information, notes and the definitions; default: 18
+var tag_popup_font_size = 10;   // font size in px for the tag explanations when hovering over them; default: 10
 
-    // !!! If you don't know what you are doing, do not procceed beyond this point !!!
-    ////////////////////////////////////////////////////////
-    ////////////////// End of Variables ////////////////////
-    ////////////////////////////////////////////////////////
+// !!! If you don't know what you are doing, do not procceed beyond this point !!!
+////////////////////////////////////////////////////////
+////////////////// End of Variables ////////////////////
+////////////////////////////////////////////////////////
 </script>
 
 
-<div class="main" id="main">
+<div class="main" lang="ja">
     <div id="expr-field" class="expression-field content">
         <span class="expression fill-flex">
             <span id="expr">{{Furigana}}</span>
@@ -41,7 +41,7 @@
 
     <div class="content-container">
         <span id="pitch-content" class="content hidden top-border">
-            <div class="fill-flex">
+            <div class="fill-flex padded">
                 <div id="pitch">
                     {{Pitch}}
                 </div>
@@ -54,14 +54,14 @@
             </aside>
         </span>
         <div id="ex-content" class="content hidden top-border">
-            <ol class="fill-flex">
+            <div class="fill-flex padded">
                 <div id="ex-plain">
                     {{Sentence}}
                 </div>
                 <div id="ex-furi" class="hidden">
                     {{Sentence with furigana}}
                 </div>
-            </ol>
+            </div>
             <aside class="tab">
                 <div id="ex-furi-tab" class="title">Furigana</div>
             </aside>
@@ -75,7 +75,7 @@
 
     <div class="glossary top-border">
         <div class="content">
-            <span id="meaning" class="fill-flex">{{Meaning}}</span>
+            <span id="meaning" class="fill-flex padded">{{Meaning}}</span>
             <aside id=dictionary-tabs class="tab">
             </aside>
         </div>
