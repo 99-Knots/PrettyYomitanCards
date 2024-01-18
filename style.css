@@ -50,7 +50,7 @@
     --main-color-lighter1: hsl(var(--h), var(--s), calc(var(--l) + var(--lighten1)));
     --main-color-lighter2: hsl(var(--h), var(--s), calc(var(--l) + var(--lighten2)));
 
-    --compl-color: hsl(calc(var(--h) +var(--compl-offset)), var(--s), var(--l));
+    --compl-color: hsl(calc(var(--h) + var(--compl-offset)), var(--s), var(--l));
     --compl-color-darker: hsl(calc(var(--h) + var(--compl-offset)), var(--s), calc(var(--l) + var(--darken1)));
 
     --expr-gradient: linear-gradient(var(--main-color), var(--main-color-darker1));
@@ -241,6 +241,10 @@
     font-size: 60%;
 }
 
+.tag .popup-text {
+    font-size: var(--tag-popup-font-size);
+}
+
 .glossary {
     color: var(--gloss-font-color);
     background: var(--gloss-gradient);
@@ -267,8 +271,25 @@
     line-height: 2em;
 }
 
+#audio {
+    position: relative;
+}
+
 audio {
-    width: 60%;
+    width: 145px;
+    position: absolute;
+    bottom: 0%;
+    left: 1em;
+}
+
+audio::-webkit-media-controls-timeline,
+video::-webkit-media-controls-timeline {
+    display: none;
+}
+
+audio::-webkit-media-controls-current-time-display,
+audio::-webkit-media-controls-time-remaining-display {
+    display: none;
 }
 
 ol, ul {
