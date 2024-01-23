@@ -15,8 +15,9 @@ var show_pitch_graph_by_default = false;
 var show_example_sentence_by_default = false;
 var show_sentence_furigana_by_default = false;
 
-var expr_font_size = 30;        
+var expr_font_size = 30;        // font size in px for the expression at the very top; default: 30
 var content_font_size = 18;     // font size in px for the example sentence, pitch information, notes and the definitions; default: 18
+var glossary_font_size = 15;    // font size in px for the explanations at the bottom; default: 15
 var tag_popup_font_size = 10;   // font size in px for the tag explanations when hovering over them; default: 10
 
 // !!! If you don't know what you are doing, do not procceed beyond this point !!!
@@ -127,6 +128,7 @@ root.style.setProperty('--l-copy', colorHSL[2] + '%');
 
 root.style.setProperty('--expr-font-size', expr_font_size + 'px');
 root.style.setProperty('--content-font-size', content_font_size + 'px');
+root.style.setProperty('--gloss-font-size', glossary_font_size + 'px');
 root.style.setProperty('--tag-popup-font-size', tag_popup_font_size + 'px');
 
 /** Converts a given RGB color to HSL format, compatible with CSS' HSL colors
@@ -317,6 +319,7 @@ function formatDictionary(dict) {
     var oldTagNames = [];
     dict.content.forEach( content => {
         var tagListElem = document.createElement('span');
+        tagListElem.classList.add('tag-list')
         var entryElem = document.createElement('ul');
         var difTag = false;
         content.tags.forEach( tag => {

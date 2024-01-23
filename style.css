@@ -4,8 +4,10 @@
 }
 
 :root {
+    font-size: 15px;
     --expr-font-size: 30px;
     --content-font-size: 18px;
+    --gloss-font-size: 15px;
     --tab-font-size: 12px;
     --tag-popup-font-size: 10px;
 
@@ -79,13 +81,13 @@
 }
 
 .main > :first-child {
-    border-top-left-radius: 1.5vh;
-    border-top-right-radius: 1.5vh;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
 }
 
 .main > :last-child, .bottom {
-    border-bottom-left-radius: 1.5vh;
-    border-bottom-right-radius: 1.5vh;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
 }
 
 .expression-field {
@@ -139,10 +141,6 @@
     fill: var(--expr-font-color);
 }
 
-.corner-offset {
-    margin-top: 1vh;
-}
-
 .tab {
     display: flex;
     flex-direction: column;
@@ -176,10 +174,6 @@
     margin-left: 0.8em;
 }
 
-.tab .title:first {
-    margin-top: 1.5vh;
-}
-
 .tab .title:hover {
     cursor: pointer;
 }
@@ -191,6 +185,10 @@
 
 .tab .title.disabled:hover {
     cursor: default;
+}
+
+.corner-offset {
+    margin-top: 1rem;
 }
 
 .top-border {
@@ -236,6 +234,12 @@
     margin-left: 0.55em;
 }
 
+.tag-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 .tag {
     color: var(--tag-font-color);
     background: var(--tag-gradient);
@@ -252,6 +256,7 @@
 .glossary {
     color: var(--gloss-font-color);
     background: var(--gloss-gradient);
+    font-size: var(--gloss-font-size);
     padding-bottom: 0.8em;
 }
 
