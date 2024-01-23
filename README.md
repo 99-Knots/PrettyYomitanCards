@@ -1,6 +1,7 @@
 # PrettyYomitanCards
 Trying to provide a visually pleasing and highly functional Anki card format that integrates with the Yomitan browser extension
 
+
 ## How to set up
 
 ### Requirements
@@ -32,7 +33,7 @@ With your new note type selected click on `Fields` and add and delete fields til
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="../main/images/AnkiFieldsDark.png">
   <source media="(prefers-color-scheme: light)" srcset="../main/images/AnkiFields.png">
-  <img alt="Screenshot of the Anki note editor showing the fields Expression, Furigana, Pitch, Pitch Graph, Meaning, Sentence, Sentence with furigana, Audio, URL and Notes." src="../main/images/AnkiFields.png" width="50%">
+  <img alt="Screenshot of the Anki note editor showing the fields Expression, Furigana, Pitch, Pitch Graph, Meaning, Sentence, Sentence with furigana, Audio, URL and Notes." src="../main/images/AnkiFields.png" width="518">
 </picture>
 
 Pay extra attention to the spelling and capitalization of each field name.
@@ -56,7 +57,7 @@ Set their values according to the following image:
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="../main/images/YomitanFieldsDark.png">
   <source media="(prefers-color-scheme: light)" srcset="../main/images/YomitanFields.png">
-  <img alt="Screenshot the Anki card configuration in Yomitan" src="../main/images/YomitanFields.png" width="50%">
+  <img alt="Screenshot of the Anki card configuration in Yomitan" src="../main/images/YomitanFields.png" width="518">
 </picture>
 
 Yomitan will probably fill out most of this automatically but make sure to verify the correct values.
@@ -74,22 +75,27 @@ Try clicking the green plus at the top right of the demo in the Yomitan settings
 
 ※ To enable Yomitan for local files as well, go to your browser's extension settings page (chrome://extensions when using Chrome for example), find Yomitan there and enable 'allow access to file URLs' for it.
 
+
 ### Stroke Order Popup
 
 To have the popup when hovering over a kanji display their stroke order, you need to install this [Japanese Stroke Order Font](https://www.nihilist.org.uk). 
 Instructions for doing so can be found in the [Anki Manual](https://docs.ankiweb.net/templates/styling.html#installing-fonts).
 
+
 ## Further customization
 
 You can easily change the cards' font sizing, which fields should be expanded by default and even the color yourself if you want to.
 
-In Anki open the card editor and search for *var colorRGB*, it should be located at the beginning of the file.
-Within the brackets you can enter the R G and B values for a new main color of your choosing. 
+In Anki open the card editor and search for *var colorRGB*, it should be located at the beginning of the template files.
+Within the brackets you can enter the R, G and B values for a new main color of your choosing. 
 All other colors in the template and a darker night mode version will be calculated based on those values.
 Try for example the combination 120, 150, 100 for a nice sage green.
 
-Below the color you will find variable with a *show_XXX_by_default* naming pattern. Changing those from *false* to *true* will automatically expand the respective field when the card appears in your reviews. 
+Below the color you will find variables with a *show_XXX_by_default* naming pattern. Changing those from *false* to *true* will automatically expand the respective field when the card appears in your reviews. 
 Slightly further down you will also find variables for the font sizes used on the card. Only enter numbers there, the unit (px) will later be added in the code.
+
+For a consistent appearance those changes will have to be applied both to the front and the back template.
+
 
 ## Other Resources
 [Anki-Addon](https://ankiweb.net/shared/info/580654285) for more audio options for Yomichan
