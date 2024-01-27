@@ -1,9 +1,8 @@
 # PrettyYomitanCards
-A humble attempt to create visually pleasing and functional flashcards for the vocabulary information provided by Yomitan.
 
 ## About this Project
 
-This repository aims to provide a practical template designed to enhance your Anki flashcards and seemlessly integrate with the Yomitan browser extension.
+This repository aims to provide a practical template designed to enhance your Anki flashcards and seemlessly integrate with the Yomitan browser extension through the use of HTML, CSS and JavaScript.
 
 Popup-dictionaries like Yomitan can offer a plethora of information for individual words and expressions.
 However, incorporating it all at once into a flashcard for study purposes can quickly lead to being overwhelmed by content.
@@ -81,6 +80,9 @@ To add a dictionary to Yomitan, in the Yomitan settings under `Dictionaries` cli
 
 ### Creating the Anki Note Type
 
+> You can skip this section by simply importing the [demo Deck](https://github.com/99-Knots/PrettyYomitanCards/releases/tag/v1.0.0) and using the note type that comes with it.
+> Continue the setup with the [Configuring Yomitan](#configuring-yomitan) section.
+
 In the Anki desktop app, under `Tools > Manage Note Types` click `Add`. You will be prompted to select an existing type as a base. Your choice here doesn't matter as we will be doing quite some customization anyway, so picking `Add:Basic` is fine. Give your new note type a name and click `OK`.
 
 With your new note type selected click on `Fields` and add and delete fields till your card type looks like this:
@@ -136,7 +138,7 @@ Without the font installed the popup will simply show a bigger version of the ka
 Open Yomitan's settings page in your browser and navigate to the `Anki` section. 
 Make sure your connection with AnkiConnect is enabled and working properly before clicking on `Configure Anki card format...`.
 
-At the top right choose a deck you want your generated cards to be added to and below that on the `Model` field select the new node type you created.
+At the top right choose a deck you want your generated cards to be added to and below that on the `Model` field select the new node type you created (or *PrettyYomitan* if you are using the demo deck).
 Yomitan will then show you a list of the selected node type's fields. 
 Set their values according to the following image:
 
