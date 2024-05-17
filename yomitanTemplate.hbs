@@ -68,10 +68,8 @@
     {{~/scope~}}
 {{/inline}}
 
-{{!~ extract the glossary entries with their tags ~}}
-{{#*inline "py-glossary"}}
-    {{~#each definition.definitions~}}
-        <div data-dictionary="{{~dictionary~}}">
+{{#*inline "py-glossary-single"~}}
+    <div data-dictionary="{{~dictionary~}}">
         {{~#each definitionTags~}}
             <i class="tag popup" data-type="tag" data-tag-name="{{~name~}}" data-tag-notes="{{~notes~}}" data-tag-category="{{~category~}}">{{~name~}}<span class="popup-text">{{~notes~}}</span></i>
         {{~/each~}}
@@ -82,6 +80,16 @@
                 <li data-type="glossary-entry">{{.}}</li>
             {{~/if~}}
         {{~/each~}}
-        </div>
-    {{~/each~}}
+    </div>
+{{~/inline}}
+
+{{!~ extract the glossary entries with their tags ~}}
+{{#*inline "py-glossary"}}
+    {{~#if (op "===" definition.type "term")~}}
+        {{~> py-glossary-single definition~}}
+    {{~else if (op "||" (op "===" definition.type "termGrouped") (op "===" definition.type "termMerged"))~}}
+        {{~#each definition.definitions~}}
+            {{~> py-glossary-single~}}
+        {{~/each~}}
+    {{~/if~}}
 {{/inline}}
