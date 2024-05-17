@@ -70,16 +70,16 @@
 
 {{#*inline "py-glossary-single"~}}
     <div data-dictionary="{{~dictionary~}}">
-        {{~#each definitionTags~}}
-            <i class="tag popup" data-type="tag" data-tag-name="{{~name~}}" data-tag-notes="{{~notes~}}" data-tag-category="{{~category~}}">{{~name~}}<span class="popup-text">{{~notes~}}</span></i>
-        {{~/each~}}
-        {{~#each glossary~}}
-            {{~#if (op "==" type "structured-content")~}}
-                {{~>py-unwrap-structured .~}}
-            {{~else~}}
-                <li data-type="glossary-entry">{{.}}</li>
-            {{~/if~}}
-        {{~/each~}}
+    {{~#each definitionTags~}}
+        <i class="tag popup" data-type="tag" data-tag-name="{{~name~}}" data-tag-notes="{{~notes~}}" data-tag-category="{{~category~}}">{{~name~}}<span class="popup-text">{{~notes~}}</span></i>
+    {{~/each~}}
+    {{~#each glossary~}}
+        {{~#if (op "==" type "structured-content")~}}
+            {{~>py-unwrap-structured .~}}
+        {{~else~}}
+            <li data-type="glossary-entry">{{.}}</li>
+        {{~/if~}}
+    {{~/each~}}
     </div>
 {{~/inline}}
 
