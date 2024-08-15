@@ -376,7 +376,7 @@ function formatMeaning(meaningElem) {
 
 ///////////////////// Side Tab Logic ////////////////////////////////////////////////////////////////////
 // disable the Sentence Tab. if it doesn't differ from the expression or no sentence has been provided
-if('{{Expression}}'==='{{Sentence}}' || sentence.textContent === '')
+if(sentence.textContent.trim() === '' || `{{Expression}}`.trim() === sentence.textContent.trim())
 {
     document.getElementById('ex-tab').classList.add('disabled');
 }
@@ -393,7 +393,7 @@ if(notes === '') {
 }
 
 // disable the Furigana Tab for Sentences, that don't contain any
-if(sentence.textContent === sentenceFurigana.textContent || sentenceFurigana.textContent === '') {
+if(sentence.textContent.trim() === sentenceFurigana.textContent.trim() || sentenceFurigana.textContent.trim() === '') {
     document.getElementById('ex-furi-tab').classList.add('disabled');
 }
 
@@ -463,9 +463,9 @@ function setupSwitchDicts() {
     for(let k=0; k<meaning.childNodes.length; k++) {
         let id = meaning.childNodes[k].id;
         ids.push(id);
-        document.getElementById(id+'-tab').addEventListener('click', () => { switchHiddenContent(ids, k) });    // todo: find a way to pass value not reference
+        document.getElementById(id+'-tab').addEventListener('click', () => { switchHiddenContent(ids, k) });
     }
-    switchHiddenContent(ids, 0);    
+    switchHiddenContent(ids, 0);
 }
 
 setupHideFunctionality('pitch-tab', 'pitch-content', null, show_pitch_by_default);

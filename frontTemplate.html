@@ -24,7 +24,7 @@ var content_font_size = 18;     // font size in px for the example sentence; def
 
 <div class="main" lang="ja">
     <div id="expr-field" class="expression-field content bottom">
-        <span class="expression fill-flex">
+        <span id="expr" class="expression fill-flex">
             {{Expression}}
         </span>
         <aside class="tab corner-offset">
@@ -43,6 +43,11 @@ var content_font_size = 18;     // font size in px for the example sentence; def
 
 
 <script>
+
+var expression = document.getElementById('expr');
+
+var sentence = document.getElementById('ex-plain');
+
 // clip rgb values to fit [0, 255] range
 for(var i=0; i<colorRGB.length; i++) 
     colorRGB[i] = (colorRGB[i]>255) ? 255 : ((colorRGB[i]<0) ? 0 : colorRGB[i]);
@@ -99,7 +104,7 @@ function RGBtoHSL(r, g, b) {
 }
 
 // because yomitan/-chan also adds one-word sentences
-if("{{Expression}}"=="{{Sentence}}")
+if(sentence.textContent.trim() === '' || expression.textContent.trim() === sentence.textContent.trim())
 {
     document.getElementById('ex-tab').classList.add('disabled');
 }
