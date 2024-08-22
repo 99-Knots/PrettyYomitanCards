@@ -101,8 +101,8 @@ Delete all the existing code in the *Front Template* and replace it with the fol
 <details>
  <summary> <b>Front Template Code</b> </summary>
  <!--insert-start: frontTemplate.html-->
- https://github.com/99-Knots/PrettyYomitanCards/blob/1dc3dbb85bc81a12d4eabae4c83ce1982da5c558/frontTemplate.html#L1-L152
- <!--insert-end-->
+https://github.com/99-Knots/PrettyYomitanCards/blob/5ed1266a0b51027bb60e621b31ccf88b4f5506ce/frontTemplate.html#L1-L157
+<!--insert-end-->
 </details>
 <br/>
 
@@ -110,8 +110,8 @@ Do the same with the *Back Template*:
 <details>
  <summary> <b>Back Template Code</b> </summary>
  <!--insert-start: backTemplate.html-->
- https://github.com/99-Knots/PrettyYomitanCards/blob/1dc3dbb85bc81a12d4eabae4c83ce1982da5c558/backTemplate.html#L1-L475
- <!--insert-end-->
+https://github.com/99-Knots/PrettyYomitanCards/blob/5ed1266a0b51027bb60e621b31ccf88b4f5506ce/backTemplate.html#L1-L478
+<!--insert-end-->
 </details>
 <br/>
 
@@ -119,8 +119,8 @@ and for *Styling*:
 <details>
  <summary> <b>Style Sheet</b> </summary>
  <!--insert-start: style.css-->
- https://github.com/99-Knots/PrettyYomitanCards/blob/1dc3dbb85bc81a12d4eabae4c83ce1982da5c558/style.css#L1-L306
- <!--insert-end-->
+https://github.com/99-Knots/PrettyYomitanCards/blob/5ed1266a0b51027bb60e621b31ccf88b4f5506ce/style.css#L1-L311
+<!--insert-end-->
 </details>
 
 
