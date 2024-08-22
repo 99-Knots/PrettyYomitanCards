@@ -100,21 +100,27 @@ Save your changes and return to the note types editor, this time selecting `Card
 Delete all the existing code in the *Front Template* and replace it with the following:
 <details>
  <summary> <b>Front Template Code</b> </summary>
+ <!--insert-start: frontTemplate.html-->
  https://github.com/99-Knots/PrettyYomitanCards/blob/1dc3dbb85bc81a12d4eabae4c83ce1982da5c558/frontTemplate.html#L1-L152
+ <!--insert-end-->
 </details>
 <br/>
 
 Do the same with the *Back Template*:
 <details>
  <summary> <b>Back Template Code</b> </summary>
+ <!--insert-start: backTemplate.html-->
  https://github.com/99-Knots/PrettyYomitanCards/blob/1dc3dbb85bc81a12d4eabae4c83ce1982da5c558/backTemplate.html#L1-L475
+ <!--insert-end-->
 </details>
 <br/>
 
 and for *Styling*:
 <details>
  <summary> <b>Style Sheet</b> </summary>
+ <!--insert-start: style.css-->
  https://github.com/99-Knots/PrettyYomitanCards/blob/1dc3dbb85bc81a12d4eabae4c83ce1982da5c558/style.css#L1-L306
+ <!--insert-end-->
 </details>
 
 
