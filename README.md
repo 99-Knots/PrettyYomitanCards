@@ -80,7 +80,7 @@ To add a dictionary to Yomitan, in the Yomitan settings under `Dictionaries` cli
 
 ### Creating the Anki Note Type
 
-> You can skip this section by simply importing the [demo Deck](https://github.com/99-Knots/PrettyYomitanCards/releases/tag/v1.0.0) and using the note type that comes with it.
+> You can skip this section by simply importing the [demo Deck](https://github.com/99-Knots/PrettyYomitanCards/releases/latest) and using the note type that comes with it.
 > Continue the setup with the [Configuring Yomitan](#configuring-yomitan) section.
 
 In the Anki desktop app, under `Tools > Manage Note Types` click `Add`. You will be prompted to select an existing type as a base. Your choice here doesn't matter as we will be doing quite some customization anyway, so picking `Add:Basic` is fine. Give your new note type a name and click `OK`.
