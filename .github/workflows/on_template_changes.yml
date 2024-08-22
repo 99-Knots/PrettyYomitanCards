@@ -1,0 +1,62 @@
+name: integrate changed templates
+
+on:
+  push:
+    branches: 
+      - main
+    paths: 
+      - 'frontTemplate.html'
+      - 'backTemplate.html'
+      - 'style.css'
+  workflow_dispatch:
+  
+permissions:
+  contents: write
+
+jobs:
+  update-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5 
+        with:
+          python-version: '3.x'
+
+      - name: Update Readme and demo deck
+        run: python actions/update_files.py ${{ github.repository }} ${{ github.sha }} 'README.md'
+              
+      - name: Commit and Push Changes
+        run: |
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config user.name "github-actions[bot]"
+            git add README.md PrettyYomitanCardsDemo.apkg
+            git commit -m "Updated demo deck and permalinks in README"
+            git push
+
+  create-release-draft:
+    runs-on: ubuntu-latest
+    needs: update-files
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Bump Version
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: true
+
+      - name: Create new Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: actions/release_body.md
+          name: AnkiDemoDeck ${{ steps.tag_version.outputs.new_tag }}
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          files: PrettyYomitanCardsDemo.apkg
+          draft: true
