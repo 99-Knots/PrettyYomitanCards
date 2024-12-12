@@ -73,7 +73,7 @@ First, you need to install the necessary programs for the generation of Anki car
    - [Jitendex](https://github.com/stephenmk/Jitendex) - modern format for the J->E JMdict
    - [JMdict](https://github.com/themoeway/jmdict-yomitan#jmdict-for-yomitan-1) - dictionary availabe in various languages
    - [JMnedict](https://github.com/themoeway/jmdict-yomitan#jmnedict-for-yomitan) - readings for different kinds of names and proper nouns
-   - [Kanjium](https://github.com/mifunetoshiro/kanjium) - pitch accents *- see [here](https://foosoft.net/projects/yomichan/index.html#dictionaries) for a direct download link*
+   - [Kanjium](https://github.com/mifunetoshiro/kanjium) - pitch accents *- see [here](https://raw.githubusercontent.com/yomidevs/yomitan/dictionaries/kanjium_pitch_accents.zip) for a direct download link*
 
 To add a dictionary to Yomitan, in the Yomitan settings under `Dictionaries` click the `Configure installed and enabled dictionaries…` option, then `Import` and select the *.zip* file of the dictionary.
 
