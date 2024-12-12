@@ -64,7 +64,7 @@ First, you need to install the necessary programs for the generation of Anki car
 - [Anki](https://apps.ankiweb.net) flashcard program - version 2.1.50 or higher
 - [Yomitan](https://github.com/themoeway/yomitan) browser extension <br/>
   *please note that while these cards should be compatible with it, [Yomichan](https://foosoft.net/posts/sunsetting-the-yomichan-project/) has been discontinued and it is highly recommended for current users to switch to Yomitan instead.
-  Instructions for migrating your settings and dictionaries can be found [here](https://github.com/themoeway/yomitan/blob/master/docs/yomichan-migration.md#migrating-from-yomichan).*
+  Instructions for migrating your settings and dictionaries can be found [here](https://yomitan.wiki/yomichan-migration/).*
 - [AnkiConnect](https://ankiweb.net/shared/info/2055492159) AddOn for Anki
 
 - A dictionary for Yomitan <br/>
@@ -162,7 +162,7 @@ Without doing so the `Configure Anki card templates...` option will not appear.
 Click it and without changing anything insert the following at the bottom of the code window (below the line *{{~> (lookup . "marker") ~}}*):
 <details>
  <summary> <b>Yomitan Template Code</b> </summary>
- https://github.com/99-Knots/PrettyYomitanCards/blob/1dc3dbb85bc81a12d4eabae4c83ce1982da5c558/yomitanTemplate.hbs#L1-L87
+  https://github.com/99-Knots/PrettyYomitanCards/blob/5a0491d3c7cbd3aee55bac5024fc08e40e921a74/yomitanTemplate.hbs#L1-L95
 </details>
 
 You can verify this step by typing *{py-glossary}* into the Card Field and pressing `Test`. If it says *"The partial py-glossary could not be found"*, check your spelling, reset the template with the button at the bottom and try again.
